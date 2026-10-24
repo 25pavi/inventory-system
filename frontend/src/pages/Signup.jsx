@@ -57,59 +57,74 @@ function Signup() {
 
   return (
     <div className="auth-page">
-      <div className="auth-card">
-        {/* Small app brand mark at the top of the card */}
-        <div className="auth-brand">
-          <span className="auth-brand-icon">📦</span>
-          <span className="auth-brand-name">Club Store</span>
+      <div className="auth-layout">
+        {/* Left hero column for SaaS look */}
+        <div className="auth-hero">
+          <div className="badge-pill">
+            <span className="badge-dot"></span> Club Store Management
+          </div>
+          <h1 className="hero-title">
+            Smart <span className="highlight-text">Inventory</span> for Your Club Store
+          </h1>
+          <p className="hero-subtitle">
+            Get started in seconds. Track stock levels, set low-inventory alerts, and keep products organized.
+          </p>
         </div>
 
-        <h1>Create account</h1>
-        <p className="auth-subtitle">Sign up to access the inventory.</p>
-        <div className="auth-divider"></div>
-
-        {/* Show error message if signup failed */}
-        {error && <div className="message message-error">{error}</div>}
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="signup-email">Email address</label>
-            <input
-              id="signup-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-              autoFocus
-            />
+        {/* Right card column with existing form */}
+        <div className="auth-card">
+          <div className="auth-brand">
+            <span className="auth-brand-icon">📦</span>
+            <span className="auth-brand-name">Club Store</span>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="signup-password">Password</label>
-            <input
-              id="signup-password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter a password"
-              required
-            />
-          </div>
+          <h2>Create account</h2>
+          <p className="auth-subtitle">Sign up to access the inventory.</p>
+          <div className="auth-divider"></div>
 
-          <button
-            id="signup-submit-btn"
-            type="submit"
-            className="btn btn-primary"
-            disabled={loading}
-          >
-            {loading ? 'Creating account…' : 'Create account'}
-          </button>
-        </form>
+          {/* Show error message if signup failed */}
+          {error && <div className="message message-error">{error}</div>}
 
-        <p className="auth-link">
-          Already have an account? <Link to="/login">Log in</Link>
-        </p>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="signup-email">Email address</label>
+              <input
+                id="signup-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                required
+                autoFocus
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="signup-password">Password</label>
+              <input
+                id="signup-password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter a password"
+                required
+              />
+            </div>
+
+            <button
+              id="signup-submit-btn"
+              type="submit"
+              className="btn btn-primary"
+              disabled={loading}
+            >
+              {loading ? 'Creating account…' : 'Create account'}
+            </button>
+          </form>
+
+          <p className="auth-link">
+            Already have an account? <Link to="/login">Log in</Link>
+          </p>
+        </div>
       </div>
     </div>
   );

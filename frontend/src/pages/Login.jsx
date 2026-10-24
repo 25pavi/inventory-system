@@ -57,66 +57,81 @@ function Login() {
 
   return (
     <div className="auth-page">
-      <div className="auth-card">
-        {/* Small app brand mark at the top of the card */}
-        <div className="auth-brand">
-          <span className="auth-brand-icon">📦</span>
-          <span className="auth-brand-name">Club Store</span>
+      <div className="auth-layout">
+        {/* Left hero column for SaaS look */}
+        <div className="auth-hero">
+          <div className="badge-pill">
+            <span className="badge-dot"></span> Club Store Management
+          </div>
+          <h1 className="hero-title">
+            Smart <span className="highlight-text">Inventory</span> for Your Club Store
+          </h1>
+          <p className="hero-subtitle">
+            Real-time stock tracking, instant alerts, and effortless store catalog management in one place.
+          </p>
         </div>
 
-        <h1>Welcome back</h1>
-        <p className="auth-subtitle">Log in to manage the inventory.</p>
-        <div className="auth-divider"></div>
-
-        {/* Show "Account created" message if coming from signup */}
-        {accountCreated && (
-          <div className="message message-success">
-            🎉 Account created! Please log in with your new credentials.
-          </div>
-        )}
-
-        {/* Show error message if login failed */}
-        {error && <div className="message message-error">{error}</div>}
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="login-email">Email address</label>
-            <input
-              id="login-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-              autoFocus
-            />
+        {/* Right card column with existing form */}
+        <div className="auth-card">
+          <div className="auth-brand">
+            <span className="auth-brand-icon">📦</span>
+            <span className="auth-brand-name">Club Store</span>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="login-password">Password</label>
-            <input
-              id="login-password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              required
-            />
-          </div>
+          <h2>Welcome back</h2>
+          <p className="auth-subtitle">Log in to manage your inventory.</p>
+          <div className="auth-divider"></div>
 
-          <button
-            id="login-submit-btn"
-            type="submit"
-            className="btn btn-primary"
-            disabled={loading}
-          >
-            {loading ? 'Logging in…' : 'Log in'}
-          </button>
-        </form>
+          {/* Show "Account created" message if coming from signup */}
+          {accountCreated && (
+            <div className="message message-success">
+              🎉 Account created! Please log in with your new credentials.
+            </div>
+          )}
 
-        <p className="auth-link">
-          Don&apos;t have an account? <Link to="/signup">Sign up</Link>
-        </p>
+          {/* Show error message if login failed */}
+          {error && <div className="message message-error">{error}</div>}
+
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="login-email">Email address</label>
+              <input
+                id="login-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                required
+                autoFocus
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="login-password">Password</label>
+              <input
+                id="login-password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <button
+              id="login-submit-btn"
+              type="submit"
+              className="btn btn-primary"
+              disabled={loading}
+            >
+              {loading ? 'Logging in…' : 'Log in'}
+            </button>
+          </form>
+
+          <p className="auth-link">
+            Don&apos;t have an account? <Link to="/signup">Sign up</Link>
+          </p>
+        </div>
       </div>
     </div>
   );

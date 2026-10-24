@@ -171,19 +171,57 @@ function Inventory() {
     }
   }
 
+  // Calculations for display-only stats
+  const totalProducts = products.length;
+  const lowStockCount = products.filter((p) => p.quantity <= p.low_stock_threshold).length;
+  const categoriesCount = new Set(products.map((p) => p.category)).size;
+
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div className="inventory-page">
-      {/* Page header with title and logout button */}
-      <div className="inventory-header">
-        <h1>📦 Club Store Inventory</h1>
+      {/* Top navbar with branding on left and logout on right */}
+      <header className="inventory-nav">
+        <div className="nav-brand">
+          <span className="brand-icon">📦</span>
+          <span className="brand-name">Club Store</span>
+        </div>
         <button className="logout-btn" onClick={handleLogout}>
           Log out
         </button>
+      </header>
+
+      {/* Hero-style page header with pill badge */}
+      <div className="inventory-hero">
+        <div className="badge-pill">
+          <span className="badge-dot"></span> Live Store Dashboard
+        </div>
+        <h1 className="page-hero-title">
+          Club Store <span className="highlight-text">Inventory</span>
+        </h1>
+        <p className="page-hero-subtitle">
+          Monitor real-time stock levels, manage items, and restock low-threshold inventory.
+        </p>
       </div>
 
-      {/* Toolbar card: search, category filter, low-stock checkbox, and Add button.
-           Wrapped in toolbar-card so they all sit inside one styled panel. */}
+      {/* Display-only stat cards */}
+      <div className="stats-grid">
+        <div className="stat-card">
+          <span className="stat-label">Total Products</span>
+          <span className="stat-value">{totalProducts}</span>
+        </div>
+        <div className="stat-card">
+          <span className="stat-label">Low Stock Items</span>
+          <span className={`stat-value ${lowStockCount > 0 ? 'stat-warning' : ''}`}>
+            {lowStockCount}
+          </span>
+        </div>
+        <div className="stat-card">
+          <span className="stat-label">Categories in Use</span>
+          <span className="stat-value">{categoriesCount}</span>
+        </div>
+      </div>
+
+      {/* Toolbar card: search, category filter, low-stock checkbox, and Add button. */}
       <div className="toolbar-card">
         <SearchFilterBar
           searchTerm={searchTerm}
