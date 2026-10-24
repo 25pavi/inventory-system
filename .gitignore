@@ -1,0 +1,4 @@
+# Root-level gitignore — catches any stray files at the top level
+node_modules/
+.env
+*.log
