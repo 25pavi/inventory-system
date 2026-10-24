@@ -182,8 +182,9 @@ function Inventory() {
         </button>
       </div>
 
-      {/* Search bar, filters, and "Add product" button — all in one top bar row */}
-      <div className="top-bar">
+      {/* Toolbar card: search, category filter, low-stock checkbox, and Add button.
+           Wrapped in toolbar-card so they all sit inside one styled panel. */}
+      <div className="toolbar-card">
         <SearchFilterBar
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}

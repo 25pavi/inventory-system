@@ -58,8 +58,15 @@ function Signup() {
   return (
     <div className="auth-page">
       <div className="auth-card">
+        {/* Small app brand mark at the top of the card */}
+        <div className="auth-brand">
+          <span className="auth-brand-icon">📦</span>
+          <span className="auth-brand-name">Club Store</span>
+        </div>
+
         <h1>Create account</h1>
         <p className="auth-subtitle">Sign up to access the inventory.</p>
+        <div className="auth-divider"></div>
 
         {/* Show error message if signup failed */}
         {error && <div className="message message-error">{error}</div>}

@@ -2,142 +2,280 @@
    index.css  —  Global styles for the whole app.
 
    HOW THIS IS ORGANIZED:
-     1. CSS Variables  — define all colors and sizes in ONE place at the top.
-     2. Global Reset   — remove browser default spacing/styles.
-     3. Base Typography — set font and text color for the whole app.
-     4. Utility classes — small reusable helpers.
-     5. Auth pages (Login / Signup) — card layout styles.
-     6. Inventory page layout.
-     7. Top bar (search, filter, add button).
-     8. Product table.
-     9. Low stock badge.
-    10. Modal (popup form).
-    11. Form elements inside the modal.
-    12. Messages (error, success, loading).
-    13. Empty state.
-    14. Responsive (mobile).
+     1.  CSS Variables  — define all colors, sizes, and speeds in ONE place.
+     2.  Global Reset   — remove browser default spacing/styles.
+     3.  Base Typography — set font, color, and line-height for the whole app.
+     4.  Animations     — subtle keyframe animations used throughout.
+     5.  Buttons        — .btn, .btn-primary, .btn-secondary, .btn-danger.
+     6.  Auth pages     — Login and Signup card layout.
+     7.  Inventory page layout — max-width wrapper and header row.
+     8.  Toolbar card   — the search, filters, and Add button row.
+     9.  Product table  — table inside a rounded card.
+    10.  Low-stock badge — small pill on low-stock rows.
+    11.  Modal (popup)  — backdrop, box, header, footer.
+    12.  Form elements  — labels, inputs, selects inside forms.
+    13.  Messages       — error, success, and loading banners.
+    14.  Empty state    — friendly message when no products are shown.
+    15.  Responsive     — mobile tweaks (max-width: 640px).
+    16.  Reduced motion — respect the OS "reduce motion" setting.
    ───────────────────────────────────────────────────────────────────────────── */
 
-/* ── 1. CSS VARIABLES ──────────────────────────────────────────────────────── */
-/* Define colors in one place. Change a variable here and it updates everywhere. */
-:root {
-  --color-bg:        #FAF7F2;  /* warm off-white background */
-  --color-text:      #2B2B2B;  /* deep charcoal text */
-  --color-accent:    #C8643B;  /* terracotta / burnt orange — used sparingly */
-  --color-accent-hover: #b0542e; /* slightly darker for hover state */
-  --color-border:    #E4DCCE;  /* soft beige border */
-  --color-surface:   #FFFFFF;  /* white card / table backgrounds */
-  --color-muted:     #7A6E62;  /* muted text for secondary info */
-  --color-error-bg:  #FFF0ED;  /* light orange-red for error messages */
-  --color-error-text:#9B2B0E;  /* dark red text for errors */
-  --color-success-bg:#F0FAF0;  /* light green for success */
-  --color-success-text:#1A6B2A;/* dark green text for success */
-  --color-badge-bg:  #FEF0E7;  /* soft warm badge background */
-  --color-badge-text:#9B4B1A;  /* dark warm badge text */
 
+/* ── 1. CSS VARIABLES ──────────────────────────────────────────────────────── */
+/* All colors, radii, shadows, and timings live here.
+   Change a value once and it updates everywhere in the app. */
+:root {
+  /* Core palette */
+  --color-bg:           #FAF7F2;  /* warm off-white page background */
+  --color-surface:      #FFFFFF;  /* white — used for cards and table */
+  --color-text:         #2B2B2B;  /* deep charcoal — main text */
+  --color-muted:        #7A6E62;  /* secondary / placeholder text */
+  --color-border:       #E4DCCE;  /* soft beige borders */
+
+  /* Terracotta accent — used sparingly for primary actions */
+  --color-accent:       #C8643B;
+  --color-accent-hover: #B0542E;  /* slightly darker for hover */
+  --color-accent-active:#9A4625;  /* even darker for click / active */
+  --color-accent-tint:  #FDF1EB;  /* very light terracotta wash */
+
+  /* Semantic message colors */
+  --color-error-bg:     #FFF0ED;
+  --color-error-text:   #9B2B0E;
+  --color-error-border: #F5C4B8;
+  --color-success-bg:   #F2FBF4;
+  --color-success-text: #1A6B2A;
+  --color-success-border:#B8E0BE;
+
+  /* Low-stock badge */
+  --color-badge-bg:     #FEF0E7;
+  --color-badge-text:   #9B4B1A;
+
+  /* Border radii */
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
-  --shadow-sm: 0 1px 4px rgba(0,0,0,0.07);
-  --shadow-md: 0 4px 20px rgba(0,0,0,0.10);
+  --radius-pill: 999px;
+
+  /* Shadows — layered for a soft, modern look */
+  --shadow-sm:  0 1px 3px rgba(43, 30, 20, 0.06), 0 1px 2px rgba(43, 30, 20, 0.04);
+  --shadow-md:  0 4px 12px rgba(43, 30, 20, 0.08), 0 2px 4px rgba(43, 30, 20, 0.05);
+  --shadow-lg:  0 8px 28px rgba(43, 30, 20, 0.12), 0 4px 8px rgba(43, 30, 20, 0.06);
+
+  /* Animation speeds */
+  --transition-fast:   150ms ease;
+  --transition-normal: 220ms ease;
+
+  /* Spacing scale (4, 8, 12, 16, 24, 32 px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
 }
 
+
 /* ── 2. GLOBAL RESET ───────────────────────────────────────────────────────── */
+/* Remove browser default margins and make box-sizing consistent.
+   box-sizing: border-box means padding is included in element width — no surprises. */
 *, *::before, *::after {
-  box-sizing: border-box; /* padding and border are included in element width */
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+
 /* ── 3. BASE TYPOGRAPHY ────────────────────────────────────────────────────── */
+/* System font stack: uses the best available font on each OS. */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               'Helvetica Neue', Arial, sans-serif;
   background-color: var(--color-bg);
   color: var(--color-text);
   font-size: 15px;
   line-height: 1.6;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased; /* crisper text on Mac / iOS */
 }
 
-/* ── 4. UTILITY CLASSES ────────────────────────────────────────────────────── */
+
+/* ── 4. ANIMATIONS ─────────────────────────────────────────────────────────── */
+/* Keyframes define the start and end of an animation.
+   We use these for the page fade-in, backdrop, and modal entrance. */
+
+/* fadeIn — used on auth pages and the modal backdrop */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* slideUp — the modal box slides up slightly as it appears */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* authCardIn — the login/signup card fades in from slightly below */
+@keyframes authCardIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+
+/* ── 5. BUTTONS ────────────────────────────────────────────────────────────── */
+/* Base button style — all buttons share these properties. */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: var(--space-2);
   padding: 9px 18px;
   border: none;
   border-radius: var(--radius-sm);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
-  transition: background-color 0.18s ease, opacity 0.18s ease;
+  text-decoration: none;
+  white-space: nowrap;
+  /* Smooth transitions for hover color AND a subtle lift (translateY) */
+  transition:
+    background-color var(--transition-fast),
+    color            var(--transition-fast),
+    border-color     var(--transition-fast),
+    box-shadow       var(--transition-fast),
+    transform        var(--transition-fast),
+    opacity          var(--transition-fast);
 }
 
+/* Primary button — terracotta fill, used for the main action */
 .btn-primary {
   background-color: var(--color-accent);
   color: #fff;
+  box-shadow: 0 1px 3px rgba(200, 100, 59, 0.25);
 }
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background-color: var(--color-accent-hover);
+  box-shadow: 0 4px 10px rgba(200, 100, 59, 0.30);
+  transform: translateY(-1px); /* subtle lift */
+}
+.btn-primary:active:not(:disabled) {
+  background-color: var(--color-accent-active);
+  box-shadow: none;
+  transform: translateY(0); /* pressed — back down */
 }
 
+/* Secondary button — outlined, no fill */
 .btn-secondary {
   background-color: transparent;
   color: var(--color-text);
-  border: 1px solid var(--color-border);
+  border: 1.5px solid var(--color-border);
 }
-.btn-secondary:hover {
-  background-color: var(--color-border);
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-accent-tint);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+.btn-secondary:active:not(:disabled) {
+  background-color: #F5E8DF;
 }
 
+/* Danger button — for delete actions */
 .btn-danger {
   background-color: transparent;
-  color: #9B2B0E;
-  border: 1px solid #f5c4b8;
+  color: var(--color-error-text);
+  border: 1.5px solid var(--color-error-border);
 }
-.btn-danger:hover {
-  background-color: #fff0ed;
+.btn-danger:hover:not(:disabled) {
+  background-color: var(--color-error-bg);
+  border-color: #e8a090;
+}
+.btn-danger:active:not(:disabled) {
+  background-color: #fde0d8;
 }
 
+/* Disabled state — visually faded, no pointer cursor */
 .btn:disabled {
-  opacity: 0.55;
+  opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-/* ── 5. AUTH PAGES (Login & Signup) ────────────────────────────────────────── */
+
+/* ── 6. AUTH PAGES (Login & Signup) ────────────────────────────────────────── */
+/* Centers the card on the page using flexbox */
 .auth-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: var(--space-6);
+  /* Subtle diagonal pattern on the background for depth */
+  background-image: radial-gradient(circle at 20% 30%, rgba(200,100,59,0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 70%, rgba(200,100,59,0.04) 0%, transparent 50%);
 }
 
+/* The white card that wraps the form */
 .auth-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: 40px 36px;
+  box-shadow: var(--shadow-lg);
+  padding: 44px 40px;
   width: 100%;
   max-width: 420px;
+  /* Animate in when the page loads */
+  animation: authCardIn var(--transition-normal) ease-out both;
 }
 
+/* App name / branding at the top of the card */
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.auth-brand-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.auth-brand-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+/* Page heading inside the card */
 .auth-card h1 {
   font-size: 24px;
   font-weight: 700;
   color: var(--color-text);
-  margin-bottom: 6px;
+  margin-bottom: var(--space-1);
+  letter-spacing: -0.3px;
 }
 
+/* Subtitle below the heading */
 .auth-card .auth-subtitle {
   color: var(--color-muted);
   font-size: 14px;
-  margin-bottom: 28px;
+  margin-bottom: var(--space-6);
 }
 
+/* Divider line above the form */
+.auth-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin-bottom: var(--space-6);
+}
+
+/* Each label + input pair */
 .auth-card .form-group {
-  margin-bottom: 18px;
+  margin-bottom: var(--space-4);
 }
 
 .auth-card label {
@@ -145,373 +283,572 @@ body {
   font-size: 13px;
   font-weight: 600;
   color: var(--color-text);
+  margin-bottom: var(--space-1) + 2px;
   margin-bottom: 6px;
 }
 
+/* Inputs on the auth pages */
 .auth-card input {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--color-border);
+  padding: 11px 14px;
+  border: 1.5px solid var(--color-border);
   border-radius: var(--radius-sm);
   font-size: 14px;
+  font-family: inherit;
   background: var(--color-bg);
   color: var(--color-text);
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 .auth-card input:focus {
   border-color: var(--color-accent);
+  /* Terracotta focus ring — clearly visible, not default blue */
+  box-shadow: 0 0 0 3px rgba(200, 100, 59, 0.15);
+}
+.auth-card input::placeholder {
+  color: #B0A89E;
 }
 
+/* Full-width submit button inside auth card */
 .auth-card .btn-primary {
   width: 100%;
-  justify-content: center;
-  padding: 11px;
+  padding: 12px;
   font-size: 15px;
-  margin-top: 8px;
+  margin-top: var(--space-2);
+  border-radius: var(--radius-sm);
 }
 
+/* "Already have an account? Log in" link row */
 .auth-link {
   text-align: center;
   font-size: 13px;
   color: var(--color-muted);
-  margin-top: 20px;
+  margin-top: var(--space-4);
 }
 .auth-link a {
   color: var(--color-accent);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
 }
 .auth-link a:hover {
   text-decoration: underline;
 }
 
-/* ── 6. INVENTORY PAGE LAYOUT ──────────────────────────────────────────────── */
+
+/* ── 7. INVENTORY PAGE LAYOUT ──────────────────────────────────────────────── */
+/* Max-width wrapper keeps content centered and padded on large screens */
 .inventory-page {
-  max-width: 1100px;
+  max-width: 1160px;
   margin: 0 auto;
-  padding: 32px 20px;
+  padding: var(--space-8) var(--space-4);
 }
 
+/* Top row: "Club Store Inventory" title on the left, Log out on the right */
 .inventory-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 28px;
+  margin-bottom: var(--space-6);
   flex-wrap: wrap;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .inventory-header h1 {
   font-size: 22px;
   font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--color-text);
 }
 
+/* Log out button — subtle, sits to the right of the title */
 .logout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
   background: transparent;
-  border: 1px solid var(--color-border);
+  border: 1.5px solid var(--color-border);
   border-radius: var(--radius-sm);
   padding: 7px 14px;
   font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
   cursor: pointer;
   color: var(--color-muted);
-  transition: all 0.15s ease;
+  transition:
+    background-color var(--transition-fast),
+    border-color     var(--transition-fast),
+    color            var(--transition-fast);
 }
 .logout-btn:hover {
-  background: var(--color-border);
-  color: var(--color-text);
+  background: var(--color-error-bg);
+  border-color: var(--color-error-border);
+  color: var(--color-error-text);
 }
 
-/* ── 7. TOP BAR (Search, Filters, Add button) ──────────────────────────────── */
-.top-bar {
+
+/* ── 8. TOOLBAR CARD (Search, Filters, Add button) ─────────────────────────── */
+/* The toolbar sits in a white card with rounded corners and a shadow,
+   like a control panel above the table. */
+.toolbar-card {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: var(--space-3);
   flex-wrap: wrap;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
 }
 
-.top-bar input[type="text"],
-.top-bar select {
+/* Search input — takes as much horizontal space as available */
+.toolbar-card input[type="text"] {
+  flex: 1;
+  min-width: 180px;
   padding: 9px 12px;
-  border: 1px solid var(--color-border);
+  border: 1.5px solid var(--color-border);
   border-radius: var(--radius-sm);
   font-size: 14px;
-  background: var(--color-surface);
+  font-family: inherit;
+  background: var(--color-bg);
   color: var(--color-text);
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
-.top-bar input[type="text"]:focus,
-.top-bar select:focus {
+.toolbar-card input[type="text"]:focus {
   border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(200, 100, 59, 0.13);
+}
+.toolbar-card input[type="text"]::placeholder {
+  color: #B0A89E;
 }
 
-.top-bar input[type="text"] {
-  flex: 1;
-  min-width: 200px;
-}
-
-.top-bar select {
+/* Category dropdown */
+.toolbar-card select {
   min-width: 170px;
+  padding: 9px 12px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--color-bg);
+  color: var(--color-text);
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  /* Remove default arrow on some browsers so we can keep it simple */
+  appearance: auto;
+}
+.toolbar-card select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(200, 100, 59, 0.13);
 }
 
-/* Low stock checkbox filter */
+/* Low stock checkbox label — displayed as a row with the checkbox and text */
 .low-stock-filter {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  color: var(--color-text);
+  gap: var(--space-2);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-muted);
   white-space: nowrap;
   cursor: pointer;
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1.5px solid transparent;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  user-select: none;
+}
+.low-stock-filter:hover {
+  background-color: var(--color-accent-tint);
+  border-color: var(--color-border);
 }
 .low-stock-filter input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--color-accent);
+  width: 15px;
+  height: 15px;
+  accent-color: var(--color-accent); /* terracotta checkbox tick */
   cursor: pointer;
+  flex-shrink: 0;
 }
 
+/* "Add product" button — pushed to the far right with margin-left: auto */
 .add-product-btn {
-  margin-left: auto; /* push to the right */
+  margin-left: auto;
+  padding: 9px 20px;
+  font-size: 14px;
 }
 
-/* ── 8. PRODUCT TABLE ──────────────────────────────────────────────────────── */
-/* Wrapper makes the table scroll sideways on small screens */
+
+/* ── 9. PRODUCT TABLE ──────────────────────────────────────────────────────── */
+/* The outer card wraps the table in a rounded, shadowed container.
+   overflow-x: auto makes the table scroll sideways on small screens. */
 .table-wrapper {
-  overflow-x: auto;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
+  overflow-x: auto;
+  /* Smooth scrollbar on WebKit browsers */
+  -webkit-overflow-scrolling: touch;
 }
 
+/* The table itself fills the wrapper */
 table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
-  white-space: nowrap; /* prevent wrapping inside cells on small screens */
+  white-space: nowrap; /* keep cells on one line so scrolling stays tidy */
 }
 
+/* Header row — slightly tinted background to stand out from data rows */
 thead {
-  background-color: #F5F0E8; /* slightly darker than page background */
+  background-color: #F7F3EE;
+  border-bottom: 2px solid var(--color-border);
 }
 
+/* Header cells — uppercase labels, muted color */
 th {
   text-align: left;
-  padding: 12px 16px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 12px var(--space-4);
+  font-size: 11px;
+  font-weight: 700;
   color: var(--color-muted);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid var(--color-border);
+  letter-spacing: 0.6px;
 }
 
+/* Right-align number columns for clean alignment */
+th.col-num, td.col-num {
+  text-align: right;
+}
+
+/* Data cells */
 td {
-  padding: 13px 16px;
+  padding: 14px var(--space-4);
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text);
+  vertical-align: middle;
 }
 
+/* No bottom border on the very last row */
 tbody tr:last-child td {
   border-bottom: none;
 }
 
+/* Row hover — a soft warm tint */
+tbody tr {
+  transition: background-color var(--transition-fast);
+}
 tbody tr:hover {
-  background-color: #FFFCF8; /* very subtle warm hover */
+  background-color: #FFFCF8;
 }
 
+/* Product name cell — slightly bolder */
+td.col-name {
+  font-weight: 500;
+}
+
+/* Action buttons inside the table — smaller than full buttons */
 .action-buttons {
   display: flex;
-  gap: 8px;
+  gap: var(--space-2);
 }
-
 .action-buttons .btn {
-  padding: 5px 12px;
-  font-size: 13px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
-/* ── 9. LOW STOCK BADGE ────────────────────────────────────────────────────── */
+
+/* ── 10. LOW-STOCK BADGE ────────────────────────────────────────────────────── */
+/* A small rounded pill that appears next to the product name */
 .badge-low-stock {
   display: inline-block;
   background-color: var(--color-badge-bg);
   color: var(--color-badge-text);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 99px; /* pill shape */
-  margin-left: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  margin-left: var(--space-2);
   vertical-align: middle;
+  border: 1px solid rgba(155, 75, 26, 0.18);
 }
 
-/* ── 10. MODAL (Popup form) ────────────────────────────────────────────────── */
-/* The dark semi-transparent backdrop behind the modal */
+
+/* ── 11. MODAL (Popup form) ────────────────────────────────────────────────── */
+/* The dark, semi-transparent backdrop covers the whole screen */
 .modal-backdrop {
   position: fixed;
   inset: 0; /* shorthand for top:0 right:0 bottom:0 left:0 */
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(20, 10, 5, 0.50);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
-  padding: 16px;
+  padding: var(--space-4);
+  /* Fade in the backdrop */
+  animation: fadeIn 200ms ease both;
 }
 
+/* The white popup box */
 .modal {
   background: var(--color-surface);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: 32px 28px;
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-8) 30px;
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
-  overflow-y: auto; /* scroll inside modal if content is tall */
+  overflow-y: auto; /* scroll if content is taller than the viewport */
+  /* Slide up + fade in */
+  animation: slideUp 220ms ease both;
 }
 
+/* Header row inside the modal: title on left, × button on right */
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .modal-header h2 {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
+  letter-spacing: -0.2px;
 }
 
-/* The × close button in the top-right corner of the modal */
+/* × close button — sits in the top-right corner of the modal */
 .modal-close {
   background: none;
   border: none;
-  font-size: 22px;
+  font-size: 20px;
   cursor: pointer;
   color: var(--color-muted);
   line-height: 1;
-  padding: 2px 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--radius-sm);
-  transition: background-color 0.15s;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 .modal-close:hover {
-  background-color: var(--color-border);
-  color: var(--color-text);
+  background-color: var(--color-error-bg);
+  color: var(--color-error-text);
 }
 
-/* ── 11. FORM ELEMENTS (inside modal) ──────────────────────────────────────── */
+/* Footer row with Save and Cancel buttons, aligned to the right */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+
+/* ── 12. FORM ELEMENTS ──────────────────────────────────────────────────────── */
+/* Used inside the modal and on auth pages */
+
+/* Spacing between each label + field pair */
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: var(--space-4);
 }
 
 .form-group label {
   display: block;
   font-size: 13px;
   font-weight: 600;
+  color: var(--color-text);
   margin-bottom: 6px;
 }
 
+/* All text/number/email/password inputs and selects share this style */
 .form-group input,
 .form-group select {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--color-border);
+  padding: 10px 13px;
+  border: 1.5px solid var(--color-border);
   border-radius: var(--radius-sm);
   font-size: 14px;
+  font-family: inherit;
   background: var(--color-bg);
   color: var(--color-text);
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 .form-group input:focus,
 .form-group select:focus {
   border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(200, 100, 59, 0.13);
+}
+.form-group input::placeholder {
+  color: #B0A89E;
 }
 
-/* Two-column layout for number fields (quantity, price, threshold) */
+/* Two-column grid for number fields (quantity, price) on wider screens */
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: var(--space-3);
 }
 
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 24px;
-}
 
-/* ── 12. MESSAGES (error, success, loading) ─────────────────────────────────── */
+/* ── 13. MESSAGES (error, success, loading) ─────────────────────────────────── */
+/* Base message bar */
 .message {
-  padding: 12px 16px;
+  padding: 11px var(--space-4);
   border-radius: var(--radius-sm);
-  font-size: 14px;
-  margin-bottom: 18px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: var(--space-4);
+  border: 1px solid transparent;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  line-height: 1.5;
 }
 
+/* Red-tinted error message */
 .message-error {
   background-color: var(--color-error-bg);
   color: var(--color-error-text);
-  border: 1px solid #f5c4b8;
+  border-color: var(--color-error-border);
 }
 
+/* Green-tinted success message */
 .message-success {
   background-color: var(--color-success-bg);
   color: var(--color-success-text);
-  border: 1px solid #b8e0be;
+  border-color: var(--color-success-border);
 }
 
+/* Muted italic loading text */
 .message-loading {
   color: var(--color-muted);
   font-style: italic;
+  background: none;
+  border: none;
+  padding-left: 0;
 }
 
-/* ── 13. EMPTY STATE ────────────────────────────────────────────────────────── */
+
+/* ── 14. EMPTY STATE ────────────────────────────────────────────────────────── */
+/* Friendly centered message when no products match the current filters */
 .empty-state {
   text-align: center;
-  padding: 60px 20px;
-  color: var(--color-muted);
+  padding: 64px var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Large emoji icon above the text */
+.empty-state-icon {
+  font-size: 40px;
+  margin-bottom: var(--space-4);
+  display: block;
+  opacity: 0.65;
 }
 
 .empty-state p {
   font-size: 15px;
-  margin-bottom: 16px;
+  color: var(--color-muted);
+  margin-bottom: var(--space-2);
 }
 
-/* ── 14. RESPONSIVE (mobile) ────────────────────────────────────────────────── */
-@media (max-width: 600px) {
+/* First paragraph is slightly bolder to stand out */
+.empty-state p:first-of-type {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+}
+
+
+/* ── 15. RESPONSIVE (mobile ≤ 640px) ────────────────────────────────────────── */
+/* On small screens we stack things vertically and make buttons full-width. */
+@media (max-width: 640px) {
+  /* Give the page less padding on the sides */
+  .inventory-page {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  /* Stack the title and logout button */
   .inventory-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .top-bar {
+  /* Toolbar: stack each control on its own line */
+  .toolbar-card {
     flex-direction: column;
     align-items: stretch;
+    gap: var(--space-2);
+    padding: var(--space-3);
   }
 
-  .top-bar input[type="text"],
-  .top-bar select {
+  .toolbar-card input[type="text"],
+  .toolbar-card select {
     min-width: unset;
     width: 100%;
   }
 
+  /* Low stock filter takes full width */
+  .low-stock-filter {
+    width: 100%;
+  }
+
+  /* Add product button: full width, pushed to its own row */
   .add-product-btn {
     margin-left: 0;
     width: 100%;
-    justify-content: center;
   }
 
+  /* Auth card: reduce padding on small screens */
   .auth-card {
-    padding: 28px 20px;
+    padding: 32px var(--space-4);
   }
 
+  /* Modal: reduce padding on small screens */
   .modal {
-    padding: 24px 18px;
+    padding: var(--space-6) var(--space-4);
+    max-height: 95vh;
   }
 
+  /* Number fields stack to one column on mobile */
   .form-row {
-    grid-template-columns: 1fr; /* stack on mobile */
+    grid-template-columns: 1fr;
+  }
+
+  /* Table action buttons: slightly smaller */
+  .action-buttons .btn {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}
+
+
+/* ── 16. REDUCED MOTION ─────────────────────────────────────────────────────── */
+/* If the user has enabled "Reduce motion" in their OS settings,
+   we skip all animations and transitions. Accessibility best practice. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

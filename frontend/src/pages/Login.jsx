@@ -58,8 +58,15 @@ function Login() {
   return (
     <div className="auth-page">
       <div className="auth-card">
+        {/* Small app brand mark at the top of the card */}
+        <div className="auth-brand">
+          <span className="auth-brand-icon">📦</span>
+          <span className="auth-brand-name">Club Store</span>
+        </div>
+
         <h1>Welcome back</h1>
         <p className="auth-subtitle">Log in to manage the inventory.</p>
+        <div className="auth-divider"></div>
 
         {/* Show "Account created" message if coming from signup */}
         {accountCreated && (
