@@ -37,7 +37,9 @@ function SearchFilterBar({
   onLowStockChange,
 }) {
   return (
-    <div className="top-bar">
+    // These controls are rendered inside the toolbar-card div in Inventory.jsx.
+    // We use a React Fragment (<>) so we don't add an extra wrapper element.
+    <>
       {/* Search input — searches by name or SKU */}
       <input
         id="search-input"
@@ -73,9 +75,9 @@ function SearchFilterBar({
         Low stock only
       </label>
 
-      {/* The "Add product" button lives in the top bar too, but it is rendered
+      {/* The "Add product" button lives in the toolbar-card too, but it is rendered
           by the parent (Inventory.jsx) so it can control modal open state. */}
-    </div>
+    </>
   );
 }
 

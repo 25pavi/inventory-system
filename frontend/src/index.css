@@ -1,174 +1,295 @@
 /* ─────────────────────────────────────────────────────────────────────────────
-   index.css  —  Global styles for the whole app.
+   index.css  —  Modern SaaS-style global stylesheet.
 
    HOW THIS IS ORGANIZED:
-     1. CSS Variables  — define all colors and sizes in ONE place at the top.
-     2. Global Reset   — remove browser default spacing/styles.
-     3. Base Typography — set font and text color for the whole app.
-     4. Utility classes — small reusable helpers.
-     5. Auth pages (Login / Signup) — card layout styles.
-     6. Inventory page layout.
-     7. Top bar (search, filter, add button).
-     8. Product table.
-     9. Low stock badge.
-    10. Modal (popup form).
-    11. Form elements inside the modal.
-    12. Messages (error, success, loading).
-    13. Empty state.
-    14. Responsive (mobile).
+     1. Google Fonts Import — Plus Jakarta Sans.
+     2. CSS Variables       — Theme palette, gradients, radii, shadows.
+     3. Global Reset        — Box sizing and margin resets.
+     4. Typography & Base   — SaaS body styling and font hierarchies.
+     5. Reusable Components — Badges, buttons, cards.
+     6. Auth Layout         — Two-column hero + card layout for Login / Signup.
+     7. Inventory Nav       — Top bar with store branding & logout.
+     8. Inventory Hero      — Hero section & key display stat cards.
+     9. Toolbar Card        — Search, filter, and primary action bar.
+    10. Product Table       — Polished rounded SaaS table card.
+    11. Modal Popup         — Blurred backdrop & animated dialog.
+    12. Form Controls       — Inputs, labels, grids.
+    13. Alerts & Banners    — Error, success, loading indicators.
+    14. Responsive Layout   — Tablet and mobile breakpoints.
+    15. Motion Accessibility— Respects user prefers-reduced-motion setting.
    ───────────────────────────────────────────────────────────────────────────── */
 
-/* ── 1. CSS VARIABLES ──────────────────────────────────────────────────────── */
-/* Define colors in one place. Change a variable here and it updates everywhere. */
-:root {
-  --color-bg:        #FAF7F2;  /* warm off-white background */
-  --color-text:      #2B2B2B;  /* deep charcoal text */
-  --color-accent:    #C8643B;  /* terracotta / burnt orange — used sparingly */
-  --color-accent-hover: #b0542e; /* slightly darker for hover state */
-  --color-border:    #E4DCCE;  /* soft beige border */
-  --color-surface:   #FFFFFF;  /* white card / table backgrounds */
-  --color-muted:     #7A6E62;  /* muted text for secondary info */
-  --color-error-bg:  #FFF0ED;  /* light orange-red for error messages */
-  --color-error-text:#9B2B0E;  /* dark red text for errors */
-  --color-success-bg:#F0FAF0;  /* light green for success */
-  --color-success-text:#1A6B2A;/* dark green text for success */
-  --color-badge-bg:  #FEF0E7;  /* soft warm badge background */
-  --color-badge-text:#9B4B1A;  /* dark warm badge text */
+/* ── 1. GOOGLE FONTS IMPORT ─────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --shadow-sm: 0 1px 4px rgba(0,0,0,0.07);
-  --shadow-md: 0 4px 20px rgba(0,0,0,0.10);
+/* ── 2. CSS VARIABLES ───────────────────────────────────────────────────────── */
+:root {
+  /* Warm SaaS color palette */
+  --color-bg-start:     #FDF1EB;  /* soft terracotta wash */
+  --color-bg-end:       #FAF7F2;  /* warm off-white canvas */
+  --color-surface:      #FFFFFF;  /* pure white card backgrounds */
+  --color-text:         #2B2B2B;  /* deep charcoal */
+  --color-muted:        #6E655B;  /* secondary muted charcoal */
+  --color-border:       #EAE2D5;  /* soft beige borders */
+
+  /* Terracotta primary accent & gradients */
+  --color-accent:       #C8643B;
+  --color-accent-hover: #B0542E;
+  --color-accent-glow:  rgba(200, 100, 59, 0.28);
+  --grad-primary:       linear-gradient(135deg, #D9774B 0%, #B0542E 100%);
+  --grad-primary-hover: linear-gradient(135deg, #E08257 0%, #9F4723 100%);
+
+  /* Status message colors */
+  --color-error-bg:     #FFF1EE;
+  --color-error-text:   #9C280D;
+  --color-error-border: #F7C8BC;
+  --color-success-bg:   #F1FAF2;
+  --color-success-text: #196627;
+  --color-success-border:#BCE5C4;
+
+  /* Low stock pill badge */
+  --color-badge-bg:     #FEF0E7;
+  --color-badge-text:   #9B4B1A;
+  --color-badge-border: #F7D4BE;
+
+  /* Border radius scale */
+  --radius-sm:   8px;
+  --radius-md:   16px;
+  --radius-lg:   20px;
+  --radius-pill: 9999px;
+
+  /* Layered soft shadows */
+  --shadow-xs: 0 1px 2px rgba(43, 30, 20, 0.04);
+  --shadow-sm: 0 2px 6px rgba(43, 30, 20, 0.05), 0 1px 2px rgba(43, 30, 20, 0.03);
+  --shadow-md: 0 8px 24px rgba(43, 30, 20, 0.07), 0 2px 6px rgba(43, 30, 20, 0.04);
+  --shadow-lg: 0 16px 40px rgba(43, 30, 20, 0.09), 0 4px 12px rgba(43, 30, 20, 0.04);
+
+  /* Animation timings */
+  --transition-fast: 180ms ease;
+  --transition-norm: 240ms ease;
 }
 
-/* ── 2. GLOBAL RESET ───────────────────────────────────────────────────────── */
+/* ── 3. GLOBAL RESET ────────────────────────────────────────────────────────── */
 *, *::before, *::after {
-  box-sizing: border-box; /* padding and border are included in element width */
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* ── 3. BASE TYPOGRAPHY ────────────────────────────────────────────────────── */
+/* ── 4. TYPOGRAPHY & BASE ───────────────────────────────────────────────────── */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: var(--color-bg);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+               Roboto, sans-serif;
+  background-color: var(--color-bg-end);
+  /* Gradient page canvas with subtle terracotta corner glow */
+  background-image:
+    radial-gradient(circle at 92% 8%, rgba(200, 100, 59, 0.10) 0%, transparent 40%),
+    radial-gradient(circle at 10% 90%, rgba(200, 100, 59, 0.06) 0%, transparent 45%),
+    linear-gradient(180deg, var(--color-bg-start) 0%, var(--color-bg-end) 100%);
+  background-attachment: fixed;
   color: var(--color-text);
   font-size: 15px;
   line-height: 1.6;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ── 4. UTILITY CLASSES ────────────────────────────────────────────────────── */
+/* Highlighted accent keyword in titles */
+.highlight-text {
+  color: var(--color-accent);
+  position: relative;
+  display: inline-block;
+}
+
+/* ── 5. REUSABLE COMPONENTS (Pills & Buttons) ───────────────────────────────── */
+/* Pill badge displayed above hero titles */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--color-muted);
+  box-shadow: var(--shadow-xs);
+  margin-bottom: 14px;
+}
+
+.badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  display: inline-block;
+}
+
+/* Shared base button styling */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 9px 18px;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
-  transition: background-color 0.18s ease, opacity 0.18s ease;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
 }
 
+/* Primary SaaS pill button with glow */
 .btn-primary {
-  background-color: var(--color-accent);
-  color: #fff;
+  background: var(--grad-primary);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px var(--color-accent-glow);
 }
-.btn-primary:hover {
-  background-color: var(--color-accent-hover);
+.btn-primary:hover:not(:disabled) {
+  background: var(--grad-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(200, 100, 59, 0.40);
+}
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px var(--color-accent-glow);
 }
 
+/* Secondary white pill button */
 .btn-secondary {
-  background-color: transparent;
+  background: var(--color-surface);
   color: var(--color-text);
-  border: 1px solid var(--color-border);
+  border: 1.5px solid var(--color-border);
+  box-shadow: var(--shadow-xs);
 }
-.btn-secondary:hover {
-  background-color: var(--color-border);
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  transform: translateY(-1px);
+}
+.btn-secondary:active:not(:disabled) {
+  transform: translateY(0);
 }
 
+/* Danger action button */
 .btn-danger {
-  background-color: transparent;
-  color: #9B2B0E;
-  border: 1px solid #f5c4b8;
+  background: var(--color-surface);
+  color: var(--color-error-text);
+  border: 1.5px solid var(--color-error-border);
+  box-shadow: var(--shadow-xs);
 }
-.btn-danger:hover {
-  background-color: #fff0ed;
+.btn-danger:hover:not(:disabled) {
+  background: var(--color-error-bg);
+  border-color: var(--color-error-text);
+  transform: translateY(-1px);
 }
 
 .btn:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-/* ── 5. AUTH PAGES (Login & Signup) ────────────────────────────────────────── */
+/* ── 6. AUTH LAYOUT (Login & Signup) ────────────────────────────────────────── */
 .auth-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 32px 20px;
 }
 
+/* Two-column container on desktop */
+.auth-layout {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  align-items: center;
+  gap: 56px;
+  max-width: 1040px;
+  width: 100%;
+}
+
+/* Left Hero pitch */
+.auth-hero {
+  padding-right: 12px;
+}
+
+.auth-hero .hero-title {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  margin-bottom: 16px;
+}
+
+.auth-hero .hero-subtitle {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-muted);
+  max-width: 440px;
+}
+
+/* Right Auth Card */
 .auth-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
   padding: 40px 36px;
   width: 100%;
-  max-width: 420px;
+  animation: cardFadeIn var(--transition-norm) ease-out both;
 }
 
-.auth-card h1 {
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.auth-brand-icon {
+  font-size: 20px;
+}
+.auth-brand-name {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-accent);
+}
+
+.auth-card h2 {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   color: var(--color-text);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .auth-card .auth-subtitle {
+  font-size: 14px;
   color: var(--color-muted);
-  font-size: 14px;
-  margin-bottom: 28px;
+  margin-bottom: 22px;
 }
 
-.auth-card .form-group {
-  margin-bottom: 18px;
-}
-
-.auth-card label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-text);
-  margin-bottom: 6px;
-}
-
-.auth-card input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  background: var(--color-bg);
-  color: var(--color-text);
-  outline: none;
-  transition: border-color 0.15s ease;
-}
-.auth-card input:focus {
-  border-color: var(--color-accent);
+.auth-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin-bottom: 22px;
 }
 
 .auth-card .btn-primary {
   width: 100%;
-  justify-content: center;
-  padding: 11px;
+  padding: 12px;
   font-size: 15px;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .auth-link {
@@ -179,92 +300,197 @@ body {
 }
 .auth-link a {
   color: var(--color-accent);
+  font-weight: 700;
   text-decoration: none;
-  font-weight: 500;
 }
 .auth-link a:hover {
   text-decoration: underline;
 }
 
-/* ── 6. INVENTORY PAGE LAYOUT ──────────────────────────────────────────────── */
+/* ── 7. INVENTORY NAVBAR ────────────────────────────────────────────────────── */
 .inventory-page {
-  max-width: 1100px;
+  max-width: 1140px;
   margin: 0 auto;
-  padding: 32px 20px;
+  padding: 24px 20px 60px;
 }
 
-.inventory-header {
+.inventory-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 28px;
-  flex-wrap: wrap;
-  gap: 12px;
+  padding: 14px 22px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 32px;
 }
 
-.inventory-header h1 {
-  font-size: 22px;
-  font-weight: 700;
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-icon {
+  font-size: 20px;
+}
+.brand-name {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
 }
 
 .logout-btn {
   background: transparent;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  padding: 6px 16px;
   font-size: 13px;
-  cursor: pointer;
+  font-weight: 600;
+  font-family: inherit;
   color: var(--color-muted);
-  transition: all 0.15s ease;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 .logout-btn:hover {
-  background: var(--color-border);
+  background: var(--color-error-bg);
+  border-color: var(--color-error-border);
+  color: var(--color-error-text);
+}
+
+/* ── 8. INVENTORY HERO & STAT CARDS ─────────────────────────────────────────── */
+.inventory-hero {
+  margin-bottom: 28px;
+}
+
+.page-hero-title {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  margin-bottom: 6px;
+}
+
+.page-hero-subtitle {
+  font-size: 15px;
+  color: var(--color-muted);
+}
+
+/* Stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-muted);
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   color: var(--color-text);
 }
 
-/* ── 7. TOP BAR (Search, Filters, Add button) ──────────────────────────────── */
-.top-bar {
+.stat-value.stat-warning {
+  color: var(--color-accent);
+}
+
+/* ── 9. TOOLBAR CARD ────────────────────────────────────────────────────────── */
+.toolbar-card {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 12px;
   flex-wrap: wrap;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 14px 18px;
+  margin-bottom: 20px;
 }
 
-.top-bar input[type="text"],
-.top-bar select {
-  padding: 9px 12px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+.toolbar-card input[type="text"] {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 16px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-pill);
   font-size: 14px;
-  background: var(--color-surface);
+  font-family: inherit;
+  background: var(--color-bg-end);
   color: var(--color-text);
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: all var(--transition-fast);
 }
-.top-bar input[type="text"]:focus,
-.top-bar select:focus {
+.toolbar-card input[type="text"]:focus {
   border-color: var(--color-accent);
+  background: var(--color-surface);
+  box-shadow: 0 0 0 3px var(--color-accent-glow);
 }
 
-.top-bar input[type="text"] {
-  flex: 1;
-  min-width: 200px;
+.toolbar-card select {
+  min-width: 180px;
+  padding: 10px 16px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--color-bg-end);
+  color: var(--color-text);
+  outline: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.toolbar-card select:focus {
+  border-color: var(--color-accent);
+  background: var(--color-surface);
+  box-shadow: 0 0 0 3px var(--color-accent-glow);
 }
 
-.top-bar select {
-  min-width: 170px;
-}
-
-/* Low stock checkbox filter */
 .low-stock-filter {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  color: var(--color-text);
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-muted);
   white-space: nowrap;
   cursor: pointer;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid transparent;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+.low-stock-filter:hover {
+  background-color: var(--color-bg-start);
+  border-color: var(--color-border);
+  color: var(--color-text);
 }
 .low-stock-filter input[type="checkbox"] {
   width: 16px;
@@ -274,165 +500,179 @@ body {
 }
 
 .add-product-btn {
-  margin-left: auto; /* push to the right */
+  margin-left: auto;
+  padding: 10px 22px;
 }
 
-/* ── 8. PRODUCT TABLE ──────────────────────────────────────────────────────── */
-/* Wrapper makes the table scroll sideways on small screens */
+/* ── 10. PRODUCT TABLE ──────────────────────────────────────────────────────── */
 .table-wrapper {
-  overflow-x: auto;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
-  white-space: nowrap; /* prevent wrapping inside cells on small screens */
+  white-space: nowrap;
 }
 
 thead {
-  background-color: #F5F0E8; /* slightly darker than page background */
+  background: #F7F2EB;
+  border-bottom: 1.5px solid var(--color-border);
 }
 
 th {
   text-align: left;
-  padding: 12px 16px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 14px 18px;
+  font-size: 11px;
+  font-weight: 800;
   color: var(--color-muted);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid var(--color-border);
+  letter-spacing: 0.6px;
+}
+
+th.col-num, td.col-num {
+  text-align: right;
 }
 
 td {
-  padding: 13px 16px;
+  padding: 16px 18px;
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text);
+  vertical-align: middle;
 }
 
 tbody tr:last-child td {
   border-bottom: none;
 }
 
+tbody tr {
+  transition: background-color var(--transition-fast);
+}
 tbody tr:hover {
-  background-color: #FFFCF8; /* very subtle warm hover */
+  background-color: #FFFDFB;
 }
 
-.action-buttons {
-  display: flex;
-  gap: 8px;
+td.col-name {
+  font-weight: 600;
 }
 
-.action-buttons .btn {
-  padding: 5px 12px;
-  font-size: 13px;
-}
-
-/* ── 9. LOW STOCK BADGE ────────────────────────────────────────────────────── */
+/* Low stock pill inside table cell */
 .badge-low-stock {
   display: inline-block;
   background-color: var(--color-badge-bg);
   color: var(--color-badge-text);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 99px; /* pill shape */
-  margin-left: 6px;
+  border: 1px solid var(--color-badge-border);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  margin-left: 8px;
   vertical-align: middle;
 }
 
-/* ── 10. MODAL (Popup form) ────────────────────────────────────────────────── */
-/* The dark semi-transparent backdrop behind the modal */
+/* Action buttons in rows */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+.action-buttons .btn {
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: var(--radius-pill);
+}
+
+/* Empty state card */
+.empty-state {
+  text-align: center;
+  padding: 68px 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+.empty-state-icon {
+  font-size: 44px;
+  margin-bottom: 16px;
+  display: block;
+}
+.empty-state p {
+  font-size: 15px;
+  color: var(--color-muted);
+  margin-bottom: 6px;
+}
+.empty-state p:first-of-type {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* ── 11. MODAL (Popup Form) ─────────────────────────────────────────────────── */
 .modal-backdrop {
   position: fixed;
-  inset: 0; /* shorthand for top:0 right:0 bottom:0 left:0 */
-  background: rgba(0, 0, 0, 0.45);
+  inset: 0;
+  background: rgba(30, 20, 15, 0.48);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
-  padding: 16px;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 200ms ease both;
 }
 
 .modal {
   background: var(--color-surface);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: 32px 28px;
+  box-shadow: var(--shadow-lg);
+  padding: 32px 30px;
   width: 100%;
-  max-width: 500px;
+  max-width: 520px;
   max-height: 90vh;
-  overflow-y: auto; /* scroll inside modal if content is tall */
+  overflow-y: auto;
+  animation: modalScaleUp 220ms ease both;
 }
 
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .modal-header h2 {
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
-/* The × close button in the top-right corner of the modal */
 .modal-close {
-  background: none;
+  background: transparent;
   border: none;
-  font-size: 22px;
+  font-size: 20px;
   cursor: pointer;
   color: var(--color-muted);
-  line-height: 1;
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  transition: background-color 0.15s;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  transition: all var(--transition-fast);
 }
 .modal-close:hover {
-  background-color: var(--color-border);
-  color: var(--color-text);
-}
-
-/* ── 11. FORM ELEMENTS (inside modal) ──────────────────────────────────────── */
-.form-group {
-  margin-bottom: 18px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.form-group input,
-.form-group select {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  background: var(--color-bg);
-  color: var(--color-text);
-  outline: none;
-  transition: border-color 0.15s ease;
-}
-.form-group input:focus,
-.form-group select:focus {
-  border-color: var(--color-accent);
-}
-
-/* Two-column layout for number fields (quantity, price, threshold) */
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  background-color: var(--color-error-bg);
+  color: var(--color-error-text);
 }
 
 .modal-footer {
@@ -440,78 +680,154 @@ tbody tr:hover {
   justify-content: flex-end;
   gap: 10px;
   margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-border);
 }
 
-/* ── 12. MESSAGES (error, success, loading) ─────────────────────────────────── */
-.message {
-  padding: 12px 16px;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  margin-bottom: 18px;
-}
-
-.message-error {
-  background-color: var(--color-error-bg);
-  color: var(--color-error-text);
-  border: 1px solid #f5c4b8;
-}
-
-.message-success {
-  background-color: var(--color-success-bg);
-  color: var(--color-success-text);
-  border: 1px solid #b8e0be;
-}
-
-.message-loading {
-  color: var(--color-muted);
-  font-style: italic;
-}
-
-/* ── 13. EMPTY STATE ────────────────────────────────────────────────────────── */
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--color-muted);
-}
-
-.empty-state p {
-  font-size: 15px;
+/* ── 12. FORM CONTROLS ──────────────────────────────────────────────────────── */
+.form-group {
   margin-bottom: 16px;
 }
 
-/* ── 14. RESPONSIVE (mobile) ────────────────────────────────────────────────── */
-@media (max-width: 600px) {
-  .inventory-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 6px;
+}
 
-  .top-bar {
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--color-bg-end);
+  color: var(--color-text);
+  outline: none;
+  transition: all var(--transition-fast);
+}
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--color-accent);
+  background: var(--color-surface);
+  box-shadow: 0 0 0 3px var(--color-accent-glow);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* ── 13. ALERTS & BANNERS ───────────────────────────────────────────────────── */
+.message {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  border: 1px solid transparent;
+}
+.message-error {
+  background-color: var(--color-error-bg);
+  color: var(--color-error-text);
+  border-color: var(--color-error-border);
+}
+.message-success {
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
+  border-color: var(--color-success-border);
+}
+.message-loading {
+  color: var(--color-muted);
+  font-style: italic;
+  padding: 8px 0;
+}
+
+/* ── 14. RESPONSIVE BREAKPOINTS ─────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .auth-layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .auth-hero {
+    text-align: center;
+    padding-right: 0;
+  }
+  .auth-hero .hero-subtitle {
+    margin: 0 auto;
+  }
+  .auth-card {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .auth-hero .hero-title {
+    font-size: 30px;
+  }
+  .auth-card {
+    padding: 30px 22px;
+  }
+  .inventory-page {
+    padding: 16px 14px 40px;
+  }
+  .inventory-nav {
+    border-radius: var(--radius-md);
+  }
+  .page-hero-title {
+    font-size: 26px;
+  }
+  .toolbar-card {
     flex-direction: column;
     align-items: stretch;
   }
-
-  .top-bar input[type="text"],
-  .top-bar select {
+  .toolbar-card input[type="text"],
+  .toolbar-card select {
     min-width: unset;
     width: 100%;
   }
-
   .add-product-btn {
     margin-left: 0;
     width: 100%;
-    justify-content: center;
   }
-
-  .auth-card {
-    padding: 28px 20px;
-  }
-
-  .modal {
-    padding: 24px 18px;
-  }
-
   .form-row {
-    grid-template-columns: 1fr; /* stack on mobile */
+    grid-template-columns: 1fr;
+  }
+  .modal {
+    padding: 24px 20px;
+  }
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes modalScaleUp {
+  from { opacity: 0; transform: scale(0.96) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── 15. REDUCED MOTION ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

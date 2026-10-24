@@ -39,6 +39,7 @@ function ProductTable({ products, onEdit, onDelete }) {
   if (products.length === 0) {
     return (
       <div className="empty-state">
+        <span className="empty-state-icon">📦</span>
         <p>No products found.</p>
         <p>Try adjusting your search or filters, or add a new product.</p>
       </div>
@@ -54,9 +55,9 @@ function ProductTable({ products, onEdit, onDelete }) {
             <th>Name</th>
             <th>SKU</th>
             <th>Category</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Low Stock At</th>
+            <th className="col-num">Quantity</th>
+            <th className="col-num">Price</th>
+            <th className="col-num">Low Stock At</th>
             <th>Date Added</th>
             <th>Actions</th>
           </tr>
@@ -65,7 +66,7 @@ function ProductTable({ products, onEdit, onDelete }) {
           {/* Render one <tr> (table row) for each product */}
           {products.map((product) => (
             <tr key={product.id}>
-              <td>
+              <td className="col-name">
                 {product.name}
                 {/* Show badge if quantity is at or below the low stock threshold */}
                 {isLowStock(product) && (
@@ -74,10 +75,10 @@ function ProductTable({ products, onEdit, onDelete }) {
               </td>
               <td>{product.sku}</td>
               <td>{product.category}</td>
-              <td>{product.quantity}</td>
+              <td className="col-num">{product.quantity}</td>
               {/* Format price in Indian Rupees with the ₹ symbol */}
-              <td>₹{Number(product.price).toFixed(2)}</td>
-              <td>{product.low_stock_threshold}</td>
+              <td className="col-num">₹{Number(product.price).toFixed(2)}</td>
+              <td className="col-num">{product.low_stock_threshold}</td>
               <td>{product.date_added}</td>
               <td>
                 <div className="action-buttons">
