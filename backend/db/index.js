@@ -8,5 +8,5 @@
 //   supabase-version branch → require('./supabaseDb')
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Currently using Google Sheets as the database.
-module.exports = require('./sheetsDb');
+// Currently using Supabase as the database (supabase-version branch).
+module.exports = require('./supabaseDb');

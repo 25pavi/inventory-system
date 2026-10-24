@@ -1,4 +1,23 @@
 // ─────────────────────────────────────────────────────────────────────────────
+// db/sheetsDb.js  —  Google Sheets database logic.
+//
+// ╔══════════════════════════════════════════════════════════════════════════╗
+// ║  THIS FILE IS DISABLED IN THE supabase-version BRANCH.                  ║
+// ║                                                                          ║
+// ║  The active database layer is supabaseDb.js.                             ║
+// ║                                                                          ║
+// ║  To switch BACK to Google Sheets:                                        ║
+// ║    1. In db/index.js, change:                                            ║
+// ║         require('./supabaseDb')  →  require('./sheetsDb')                ║
+// ║    2. Uncomment the code below (remove the /* and */ delimiters).        ║
+// ║    3. Make sure your .env has the Google Sheets variables:               ║
+// ║         GOOGLE_SHEET_ID, GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY║
+// ╚══════════════════════════════════════════════════════════════════════════╝
+// ─────────────────────────────────────────────────────────────────────────────
+
+/*
+
+// ─────────────────────────────────────────────────────────────────────────────
 // db/sheetsDb.js  —  All Google Sheets database logic lives here.
 //
 // HOW GOOGLE SHEETS WORKS AS A DATABASE:
@@ -264,3 +283,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
 };
+
+*/
